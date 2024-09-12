@@ -1,0 +1,28 @@
+{
+  "name": "@htilssu/wowo",
+  "version": "1.0.2",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "e-wallet",
+    "htilssu"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "htilssu",
+  "license": "ISC",
+  "description": "Module tương tác với ứng dụng e-wallet môn học CNPM-DAPM",
+  "devDependencies": {
+    "@types/node": "^22.5.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "axios": "^1.7.5",
+    "release-it": "^17.6.0"
+  }
+}
