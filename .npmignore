@@ -1,5 +1,6 @@
 index.ts
 tsconfig.json
 .idea/src/
+libs
 /src/
 /node_modules/
