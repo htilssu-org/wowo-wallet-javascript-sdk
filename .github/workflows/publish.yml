@@ -1,2 +1,52 @@
 on:
+  push:
+    branches:
+      - main
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    name: Set Up Environment
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: setup
+    name: Deploy to Package Registry
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Publish to GitHub Package Registry
+        run: pnpm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
