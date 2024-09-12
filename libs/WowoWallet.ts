@@ -1,13 +1,19 @@
 import axios, {AxiosInstance} from "axios";
+import {isValidUrl} from "./utils/urlUtil";
 
-export class WowoWallet {
+export class WoWoWallet {
     apiKey: string
     baseUrl: string = "https://api.wowo.htilssu.id.vn"
     req: AxiosInstance
 
-    constructor(apiKey: string, baseUrl: string) {
+    constructor(apiKey: string, baseUrl?: string) {
         this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+
+        if (baseUrl && !isValidUrl(baseUrl)) {
+            throw new Error("Invalid baseUrl")
+        }
+
+        this.baseUrl = baseUrl ?? this.baseUrl;
         this.req = axios.create({
             baseURL: this.baseUrl,
             headers: {
@@ -23,7 +29,8 @@ export class WowoWallet {
         return response.data
     }
 
-    async cancelOrder(orderId: string): Promise<void> {
+    async cancelOrder(orderId: string):
+        Promise<void> {
         const url = `${this.baseUrl}/v1/orders/${orderId}`
         await this.req.delete<WoWoResponse>(url)
     }
