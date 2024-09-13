@@ -1,5 +1,6 @@
 {
   "name": "@htilssu/wowo",
+  "homepage": "https://htilssu-org.github.io/wowo-wallet-javascript-sdk/",
   "version": "1.1.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
