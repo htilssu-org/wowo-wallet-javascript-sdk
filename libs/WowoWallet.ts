@@ -40,6 +40,33 @@ export class WoWoWallet {
         const url = `${this.baseUrl}/v1/orders/${orderId}`
         await this.req.delete<WoWoResponse>(url)
     }
+
+    async signIn(data: SignInProps) {
+        const url = `${this.baseUrl}/v1/auth/signin`
+        const response = await this.req.post<WoWoResponse>(url, data)
+    }
+}
+
+export type SignInProps = {
+    username: string
+    password: string
+}
+
+export type  SignInResponse = {
+    user: User
+    token: string
+}
+
+export type User = {
+    id: string
+    username: string
+    email: string
+    phone: string
+    fullName: string
+    avatar: string
+    role: string
+    createdAt: string
+    updatedAt: string
 }
 
 export type WoWoResponse = {
