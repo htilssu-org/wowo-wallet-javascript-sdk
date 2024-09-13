@@ -3,4 +3,5 @@ tsconfig.json
 .idea/src/
 /libs
 /src/
+/docs
 /node_modules/

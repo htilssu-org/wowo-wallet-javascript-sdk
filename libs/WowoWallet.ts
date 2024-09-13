@@ -2,10 +2,16 @@ import axios, {AxiosInstance} from "axios";
 import {isValidUrl} from "./utils/urlUtil";
 
 export class WoWoWallet {
-    apiKey: string
-    baseUrl: string = "https://api.wowo.htilssu.id.vn"
+
+    private readonly apiKey: string
+    private readonly baseUrl: string = "https://api.wowo.htilssu.id.vn"
     req: AxiosInstance
 
+    /**
+     * Tạo mới một instance của WoWoWallet
+     * @param apiKey API KEY được cung cấp bởi WowoWallet
+     * @param baseUrl URL của WowoWallet, mặc định là {@link https://api.wowo.htilssu.id.vn}
+     */
     constructor(apiKey: string, baseUrl?: string) {
         this.apiKey = apiKey;
 
@@ -60,6 +66,7 @@ export type ItemProps = {
 
 export type CallbackProps = {
     callbackUrl: string
+    returnUrl?: string
 }
 
 export type CreateOrderResponse = {

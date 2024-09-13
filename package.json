@@ -10,6 +10,7 @@
     "release": "release-it",
     "test": "jest"
   },
+  "readme": "README.md",
   "keywords": [
     "e-wallet",
     "htilssu"
