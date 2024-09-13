@@ -1,6 +1,6 @@
 {
   "name": "@htilssu/wowo",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
@@ -36,10 +36,6 @@
     "type": "git",
     "url": "git+ssh://git@github.com/htilssu-org/wowo-wallet-javascript-sdk.git"
   },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
+  "license": "(MIT OR Apache-2.0)",
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }
