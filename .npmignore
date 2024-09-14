@@ -5,3 +5,4 @@ libs
 __test__
 node_modules/
 .github
+!/dist/
