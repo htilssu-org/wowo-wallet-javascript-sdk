@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from "axios";
+import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {isValidUrl} from "./utils/urlUtil";
 
 export class WoWoWallet {
@@ -28,21 +28,25 @@ export class WoWoWallet {
         })
     }
 
-    async createOrder(props: CreateOrderProps): Promise<CreateOrderResponse> {
+    /**
+     * Tạo một đơn hàng mới
+     * @param props Thông tin đơn hàng
+     */
+    async createOrder(props: CreateOrderProps): Promise<OrderResponse> {
         const url = `${this.baseUrl}/v1/orders`
-        const response = await this.req.post<CreateOrderResponse>(url, props)
+        const response = await this.req.post<OrderResponse>(url, props)
 
         return response.data
     }
 
     async cancelOrder(orderId: string):
-        Promise<void> {
-        const url = `${this.baseUrl}/v1/orders/${orderId}`
-        await this.req.delete<WoWoResponse>(url)
+        Promise<AxiosResponse<WoWoResponse | OrderResponse>> {
+        const url = `${this.baseUrl}/v1/orders/${orderId}/cancel`
+        return await this.req.post<WoWoResponse>(url)
     }
 
     async signIn(data: SignInProps) {
-        const url = `${this.baseUrl}/v1/auth/signin`
+        const url = `${this.baseUrl}/v1/auth/sign-in`
         const response = await this.req.post<WoWoResponse>(url, data)
     }
 }
@@ -75,34 +79,87 @@ export type WoWoResponse = {
     errorCode: number
 }
 
+/**
+ * Thông tin đơn hàng
+ */
 export type CreateOrderProps = {
-    orderId: string
+    /**
+     * Mã đơn hàng
+     */
+    orderId?: string
+    // Số tiền
     amount: number
+    // Đơn vị tiền tệ `VND, USD`
     currency: string
+    // Mô tả đơn hàng
     description: string
+    // Tên dịch vụ
     serviceName: string
+    /**
+     * Danh sách sản phẩm
+     * @example
+     * [
+     *     {
+     *         name: "Product 1",
+     *         quantity: 1,
+     *         price: 1000
+     *     },
+     *     {
+     *         name: "Product 2",
+     *         quantity: 2,
+     *         price: 2000
+     *     }
+     * ]
+     */
     items?: Array<ItemProps>
+    /**
+     * Thông tin callback
+     * @example
+     * {
+     *     callbackUrl: "https://your-callback-url",
+     *     returnUrl: "https://your-return-url"
+     * }
+     * @see {@link CallbackProps}
+     */
     callback: CallbackProps
 }
 
+/**
+ * Thông tin sản phẩm
+ * @see {@link CreateOrderProps}
+ */
 export type ItemProps = {
+    // Tên sản phẩm
     name: string
+    // Số lượng
     quantity: number
+    // Giá tiền
     price: number
 }
 
+/**
+ * Thông tin callback
+ * @see {@link CreateOrderProps}
+ */
 export type CallbackProps = {
     callbackUrl: string
     returnUrl?: string
 }
 
-export type CreateOrderResponse = {
+/**
+ * Response trả về khi tạo đơn hàng
+ */
+export type OrderResponse = {
+    // Mã đơn hàng thanh toán của ví
     orderId: string,
     amount: number,
     currency: string,
+    // Trạng thái đơn hàng
     status: string,
     description: string,
     serviceName: string,
+    // Thời gian tạo đơn hàng
     createdAt: string,
+    // Thời gian cập nhật đơn hàng
     updatedAt: string,
 }

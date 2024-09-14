@@ -1,8 +1,7 @@
 index.ts
 tsconfig.json
-.idea/src/
-/libs
-/src/
-/docs
-/__test__
-/node_modules/
+.idea
+libs
+__test__
+node_modules/
+.github
