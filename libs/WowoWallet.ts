@@ -33,6 +33,20 @@ export class WoWoWallet {
      * @param props Thông tin đơn hàng
      */
     async createOrder(props: CreateOrderProps): Promise<OrderResponse> {
+
+        if (props.items && props.items.length != 0) {
+            const itemHasNegativePriceOrNegativeQuantity = props.items.find(
+                value => value.price < 0 || value.quantity <= 0);
+            if (itemHasNegativePriceOrNegativeQuantity) {
+                throw new Error("Giá của item phải lớn hơn hoặc bằng 0, Số lượng phải lớn hơn 0")
+            }
+        }
+
+        //check url callback
+        if (props.callback && !isValidUrl(props.callback.callbackUrl)) {
+            throw new Error("Đường dẫn callback không hợp lệ")
+        }
+
         const url = `${this.baseUrl}/v1/orders`
         const response = await this.req.post<OrderResponse>(url, props)
 
@@ -75,8 +89,8 @@ export type User = {
 
 export type WoWoResponse = {
     message: string,
-    error: string,
-    errorCode: number
+    error?: string,
+    errorCode?: number
 }
 
 /**
@@ -87,13 +101,21 @@ export type CreateOrderProps = {
      * Mã đơn hàng
      */
     orderId?: string
-    // Số tiền
+    /**
+     * Tổng tiền của hóa đơn
+     */
     amount: number
-    // Đơn vị tiền tệ `VND, USD`
+    /**
+     * Đơn vị tiền tệ `VND, USD`
+     */
     currency: string
-    // Mô tả đơn hàng
-    description: string
-    // Tên dịch vụ
+    /**
+     * Mô tả của đơn hàng
+     */
+    description?: string
+    /**
+     * Tên dịch vụ
+     */
     serviceName: string
     /**
      * Danh sách sản phẩm
@@ -129,20 +151,36 @@ export type CreateOrderProps = {
  * @see {@link CreateOrderProps}
  */
 export type ItemProps = {
-    // Tên sản phẩm
+    /**
+     * Tên sản phẩm
+     */
     name: string
-    // Số lượng
+    /**
+     * Số lượng sản phẩm
+     * @remarks Số lượng sản phẩm phải lớn hơn 0
+     */
     quantity: number
-    // Giá tiền
+    /**
+     * Giá sản phẩm
+     * @remarks số tiền phải lớn hơn hoặc bằng 0
+     */
     price: number
 }
 
 /**
- * Thông tin callback
+ * {@link callbackUrl} là URL callback dùng để cập nhật trạng thái đơn hàng của bạn khi người dùng thanh toán thành công
+ * `METHOD` bắt buộc là `POST` <br>
+ * {@link returnUrl} là url trang bạn muốn người dùng chuyển hướng đến khi người dùng thanh toán xong
  * @see {@link CreateOrderProps}
  */
 export type CallbackProps = {
+    /**
+     * URL callback dùng để cập nhật trạng thái đơn hàng của bạn khi người dùng thanh toán thành công
+     */
     callbackUrl: string
+    /**
+     * URL trang bạn muốn người dùng chuyển hướng đến khi người dùng thanh toán xong
+     */
     returnUrl?: string
 }
 
@@ -150,16 +188,24 @@ export type CallbackProps = {
  * Response trả về khi tạo đơn hàng
  */
 export type OrderResponse = {
-    // Mã đơn hàng thanh toán của ví
+    /**
+     * Mã đơn thanh toán của ví
+     */
     orderId: string,
     amount: number,
     currency: string,
-    // Trạng thái đơn hàng
-    status: string,
+    /**
+     * Thái thái đơn hàng `SUCCESS`, `PENDING`, `REFUND`
+     */
+    status: 'SUCCESS' | 'PENDING' | 'REFUND',
     description: string,
     serviceName: string,
-    // Thời gian tạo đơn hàng
+    /**
+     * Thời gian tạo đơn hàng
+     */
     createdAt: string,
-    // Thời gian cập nhật đơn hàng
+    /**
+     * Thời gian cập nhật đơn hàng lân cuối
+     */
     updatedAt: string,
 }

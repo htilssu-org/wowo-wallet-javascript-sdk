@@ -1,7 +1,5 @@
-import {WoWoWallet} from "./libs/WowoWallet";
-
-export function hello() {
-    console.log("hello from wowowallet");
+export function hello(test: string) {
+    console.log(`hello from ${test}`);
 }
 
 export * from "./libs/WowoWallet";
