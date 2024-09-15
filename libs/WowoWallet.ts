@@ -1,5 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {isValidUrl} from "./utils/urlUtil";
+import {throws} from "node:assert";
 
 export class WoWoWallet {
 
@@ -13,7 +14,12 @@ export class WoWoWallet {
      * @param baseUrl URL của WowoWallet, mặc định là {@link https://api.wowo.htilssu.id.vn}
      */
     constructor(apiKey: string, baseUrl?: string) {
-        this.apiKey = apiKey;
+
+        if (!apiKey){
+            throw new Error("API KEY không được để trống")
+        }
+
+        this.apiKey = apiKey
 
         if (baseUrl && !isValidUrl(baseUrl)) {
             throw new Error("Invalid baseUrl")

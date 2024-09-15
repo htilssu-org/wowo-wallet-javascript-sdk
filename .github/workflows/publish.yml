@@ -55,7 +55,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-#    needs: build
+    needs: testing
     env:
       NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
     name: Deploy to Package Registry
