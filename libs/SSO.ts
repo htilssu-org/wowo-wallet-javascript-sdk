@@ -11,8 +11,21 @@ export class SSO {
     public async verify(token: string) {
         try {
             return await jose.jwtVerify(token, this.jwk);
-        } catch (e){
+        } catch (e) {
             return null;
         }
     }
+}
+
+export type TokenPayload = {
+    id: string
+    role: string
+    firstName: string
+    lastName: string
+    email: string
+    avatar: string
+    phoneNumber: string
+    address: string
+    dob: string
+    gender: boolean
 }
