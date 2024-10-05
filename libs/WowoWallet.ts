@@ -1,6 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {isValidUrl} from "./utils/urlUtil";
-import {throws} from "node:assert";
 
 export class WoWoWallet {
 
@@ -15,7 +14,7 @@ export class WoWoWallet {
      */
     constructor(apiKey: string, baseUrl?: string) {
 
-        if (!apiKey){
+        if (!apiKey) {
             throw new Error("API KEY không được để trống")
         }
 
@@ -40,12 +39,24 @@ export class WoWoWallet {
      */
     async createOrder(props: CreateOrderProps): Promise<OrderResponse> {
 
-        if (props.items && props.items.length != 0) {
+        if (props.items && props.items.length !== 0) {
             const itemHasNegativePriceOrNegativeQuantity = props.items.find(
                 value => value.price < 0 || value.quantity <= 0);
             if (itemHasNegativePriceOrNegativeQuantity) {
                 throw new Error("Giá của item phải lớn hơn hoặc bằng 0, Số lượng phải lớn hơn 0")
             }
+        }
+
+        if (props.amount < 0) {
+            throw new Error('Số tiền phải lớn hơn hoặc bằng 0')
+        }
+
+        if (props.callback?.returnUrl && !isValidUrl(props.callback.returnUrl)) {
+            throw new Error("Đường dẫn return không hợp lệ")
+        }
+
+        if (!props.callback?.callbackUrl && !isValidUrl(props.callback.callbackUrl)) {
+            throw new Error("Đường dẫn callback không hợp lệ")
         }
 
         //check url callback
@@ -65,21 +76,8 @@ export class WoWoWallet {
         return await this.req.post<WoWoResponse>(url)
     }
 
-    async signIn(data: SignInProps) {
-        const url = `${this.baseUrl}/v1/auth/sign-in`
-        const response = await this.req.post<WoWoResponse>(url, data)
-    }
 }
 
-export type SignInProps = {
-    username: string
-    password: string
-}
-
-export type  SignInResponse = {
-    user: User
-    token: string
-}
 
 export type User = {
     id: string

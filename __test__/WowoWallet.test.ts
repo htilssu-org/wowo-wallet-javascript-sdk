@@ -1,5 +1,6 @@
-import {beforeAll, expect, test} from "@jest/globals";
 import {WoWoWallet} from "../libs/WowoWallet";
+
+jest.mock("axios")
 
 let wowo: WoWoWallet;
 
