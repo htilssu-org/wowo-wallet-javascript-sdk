@@ -30,8 +30,8 @@ export function useSSOCallback(app: Express) {
     )
 
     app.post('/auth/sso', (req, res, next) => {
-        const {searchParams} = new URL(req.url)
-        const token = searchParams.get('Token')
+
+        const token = req.query.Token?.toString();
 
         const body = req.body;
         // TODO: add more handle
