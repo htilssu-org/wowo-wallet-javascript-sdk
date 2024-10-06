@@ -15,6 +15,10 @@ export class SSO {
             return null;
         }
     }
+
+    public redirectToLogin(){
+
+    }
 }
 
 export type TokenPayload = {

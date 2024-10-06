@@ -34,7 +34,7 @@ export function useSSOCallback(app: Express) {
         const token = searchParams.get('Token')
 
         const body = req.body;
-
+        // TODO: add more handle
         res.setHeader('Set-Cookie', `Token=${token}; HttpOnly; Secure;`)
         next();
     })
