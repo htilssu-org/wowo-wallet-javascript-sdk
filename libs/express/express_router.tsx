@@ -7,8 +7,23 @@ const sso = new SSO();
 
 const req = axios.create({})
 
+/**
+ * Hàm đăng ký middleware cho việc xác thực SSO bao gồm:
+ * - Xác thực token
+ * - Lưu token vào cookie (sso callback)
+ * ```js
+ * const {useSSOCallback} = require('@htilssu/sso');
+ * const express = require('express');
+ *
+ * const app = express();
+ *
+ * useSSOCallback(app); //Add middleware handle verify token
+ * ```
+ * @remarks Hàm này phải được gọi sau khi sử dụng parseCookie không sẽ throw ra lỗi
+ * @param app express instance
+ */
 export function useSSOCallback(app: Express) {
-    app.all("/", async (req, res, next) => {
+    app.use(async (req, res, next) => {
             const token = req.cookies["Token"] as string;
             if (!token) {
                 // @ts-ignore
@@ -29,7 +44,7 @@ export function useSSOCallback(app: Express) {
         }
     )
 
-    app.get('/auth/sso', (req, res, next) => {
+    app.all('/auth/sso', (req, res, next) => {
 
         const token = req.query.Token?.toString();
 
