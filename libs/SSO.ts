@@ -1,7 +1,9 @@
 import * as jose from "jose";
 
+export const baseUrl = "https://sso.htilssu.id.vn";
+
 export class SSO {
-    private baseUrl: string = "https://sso.htilssu.id.vn"
+    private baseUrl: string = baseUrl;
     private readonly jwk
 
     constructor() {

@@ -29,7 +29,7 @@ export function useSSOCallback(app: Express) {
         }
     )
 
-    app.post('/auth/sso', (req, res, next) => {
+    app.get('/auth/sso', (req, res, next) => {
 
         const token = req.query.Token?.toString();
 
