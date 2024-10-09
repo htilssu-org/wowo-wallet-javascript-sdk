@@ -1,14 +1,12 @@
-import * as jose from "jose";
+import {verify} from "./jwt";
 
 export const baseUrl = "https://sso.htilssu.id.vn";
 
 export class SSO {
     private baseUrl: string = baseUrl;
-    private readonly jwk
     private readonly serviceId: string;
 
     constructor(serviceId: string) {
-        this.jwk = jose.createRemoteJWKSet(new URL(`${this.baseUrl}/v1/sso/certs`))
         this.serviceId = serviceId;
     }
 
@@ -20,7 +18,7 @@ export class SSO {
      */
     public async verify(token: string) {
         try {
-            return await jose.jwtVerify(token, this.jwk);
+            return await verify(token)
         } catch (e) {
             return null;
         }

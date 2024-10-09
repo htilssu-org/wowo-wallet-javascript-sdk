@@ -1,9 +1,8 @@
 import {Express} from 'express';
 import axios from "axios";
-import {SSO, TokenPayload} from "../SSO";
+import {TokenPayload} from "../SSO";
 import {JWTPayload} from "jose";
-
-const sso = new SSO();
+import { verify } from '../jwt';
 
 const req = axios.create({})
 
@@ -31,7 +30,7 @@ export function useSSOCallback(app: Express) {
                 next();
             }
 
-            const payload = (await sso.verify(token))?.payload;
+            const payload = (await verify(token))?.payload;
             if (!payload) {
                 // @ts-ignore
                 res.user = null;
