@@ -34,9 +34,11 @@ export class SSO {
      * Sau khi xác thực xong người dùng sẽ được chuyển hướng tới `returnUrl`
      * `http://localhost:3000?Token=... các dịch vụ liên kết sẽ lấy token từ query params và lưu vào cookie của app`
      * @param returnUrl sau khi đăng nhập xong server sso sẽ chuyển hướng tới
+     * @param callbackUrl callback sau khi đăng nhập xong sso sẽ gọi tới bằng `POST` method
      */
-    public redirectToLogin(returnUrl?: string) {
-        location.href = `${this.baseUrl}/sign-in?returnUrl=${returnUrl ? returnUrl : location}&serviceId=${this.serviceId}`
+    public redirectToLogin(returnUrl?: string, callbackUrl?: string) {
+        location.href = `${this.baseUrl}/sign-in?returnUrl=${returnUrl ? returnUrl : location}
+        &serviceId=${this.serviceId}&callbackUrl=${callbackUrl}`
     }
 }
 

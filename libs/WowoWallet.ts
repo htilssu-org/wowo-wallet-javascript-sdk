@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import {isValidUrl} from "./utils/urlUtil";
+import {isValidUrl} from "./utils";
 
 export class WoWoWallet {
 

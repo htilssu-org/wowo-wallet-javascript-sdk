@@ -1,5 +1,7 @@
 > Đọc thêm tài liệu [tại đây](https://htilssu-org.github.io/wowo-wallet-javascript-sdk/#/)
 
+# Đọc tài liệu chi tiết [tại đây](https://htilssu-org.github.io/wowo-wallet-javascript-sdk/#/)
+
 # Installation
 
 ```npm
