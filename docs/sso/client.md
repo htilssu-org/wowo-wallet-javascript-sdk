@@ -40,4 +40,4 @@ if (token) {
 }
 ```
 
-Tiếp tục config server side (tại đây)[/sso/server]
+Tiếp tục config server side [tại đây](/sso/server)
