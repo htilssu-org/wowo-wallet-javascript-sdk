@@ -2,7 +2,7 @@ import {Express} from 'express';
 import axios from "axios";
 import {TokenPayload} from "../SSO";
 import {JWTPayload} from "jose";
-import { verify } from '../jwt';
+import {verify} from '../jwt';
 
 const req = axios.create({})
 
@@ -26,19 +26,19 @@ export function useSSOCallback(app: Express) {
             const token = req.cookies["Token"] as string;
             if (!token) {
                 // @ts-ignore
-                res.user = null;
+                res.locals.user = null;
                 next();
             }
 
             const payload = (await verify(token))?.payload;
             if (!payload) {
                 // @ts-ignore
-                res.user = null;
+                res.locals.user = null;
                 next();
             }
 
             // @ts-ignore
-            req.user = payload as JWTPayload & TokenPayload;
+            res.locals.user = payload as JWTPayload & TokenPayload;
             next();
         }
     )
