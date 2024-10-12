@@ -1,6 +1,6 @@
 ## Installation
 ```js
-const {useSSOCallback} = require('@htilssu/sso');
+const {useSSOCallback} = require('@htilssu/wowo');
 const express = require('express');
 
 const app = express();
