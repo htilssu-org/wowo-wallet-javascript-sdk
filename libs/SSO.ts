@@ -37,8 +37,7 @@ export class SSO {
      * @param callbackUrl callback sau khi đăng nhập xong sso sẽ gọi tới bằng `POST` method
      */
     public redirectToLogin(returnUrl?: string, callbackUrl?: string) {
-        location.href = `${this.baseUrl}/sign-in?returnUrl=${returnUrl ? returnUrl : location}
-        &serviceId=${this.serviceId}&callbackUrl=${callbackUrl}`
+        location.href = `${this.baseUrl}/sign-in?returnUrl=${returnUrl ? returnUrl : location}&serviceId=${this.serviceId}&callbackUrl=${callbackUrl}`
     }
 }
 
