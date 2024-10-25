@@ -43,7 +43,7 @@ export function useSSOCallback(app: Express) {
             if (payload.role === 'user') {
                 payload.id = payload.userId;
             } else {
-                payload.id = payload.adminId;
+                payload.id = payload.partnerId;
             }
             res.locals.user = payload as JWTPayload & TokenPayload;
             next();
