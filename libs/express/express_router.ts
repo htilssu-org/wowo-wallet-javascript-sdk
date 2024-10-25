@@ -28,6 +28,7 @@ export function useSSOCallback(app: Express) {
                 // @ts-ignore
                 res.locals.user = null;
                 next();
+                return;
             }
 
             const payload = (await verify(token))?.payload;
@@ -35,9 +36,15 @@ export function useSSOCallback(app: Express) {
                 // @ts-ignore
                 res.locals.user = null;
                 next();
+                return;
             }
 
             // @ts-ignore
+            if (payload.role === 'user') {
+                payload.id = payload.userId;
+            } else {
+                payload.id = payload.adminId;
+            }
             res.locals.user = payload as JWTPayload & TokenPayload;
             next();
         }
