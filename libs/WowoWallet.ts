@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosResponse} from "axios";
+import axios, {AxiosInstance} from "axios";
 import {isValidUrl} from "./utils";
 
 export class WoWoWallet {
@@ -41,13 +41,13 @@ export class WoWoWallet {
 
         if (props.items && props.items.length !== 0) {
             const itemHasNegativePriceOrNegativeQuantity = props.items.find(
-                value => value.price < 0 || value.quantity <= 0);
+                value => value.unitPrice < 0 || value.amount <= 0);
             if (itemHasNegativePriceOrNegativeQuantity) {
                 throw new Error("Giá của item phải lớn hơn hoặc bằng 0, Số lượng phải lớn hơn 0")
             }
         }
 
-        if (props.amount < 0) {
+        if (props.money < 0) {
             throw new Error('Số tiền phải lớn hơn hoặc bằng 0')
         }
 
@@ -55,27 +55,62 @@ export class WoWoWallet {
             throw new Error("Đường dẫn return không hợp lệ")
         }
 
-        if (!props.callback?.callbackUrl && !isValidUrl(props.callback.callbackUrl)) {
+        if (!isValidUrl(props?.callback?.returnUrl)) {
             throw new Error("Đường dẫn callback không hợp lệ")
         }
 
         //check url callback
-        if (props.callback && !isValidUrl(props.callback.callbackUrl)) {
+        if (props.callback && !isValidUrl(props?.callback?.successUrl)) {
             throw new Error("Đường dẫn callback không hợp lệ")
         }
 
-        const url = `${this.baseUrl}/v1/orders`
+        const url = `${this.baseUrl}/v1/orders/create`
         const response = await this.req.post<OrderResponse>(url, props)
 
         return response.data
     }
 
-    async cancelOrder(orderId: string):
-        Promise<AxiosResponse<WoWoResponse | OrderResponse>> {
+    /**
+     * Hủy đơn hàng của bạn
+     *
+     * Mã code trả về:
+     * - `200` Hủy đơn hàng thành công
+     * - `400` Đơn hàng không thể hủy do đơn hàng đã được thanh toán hoặc đã hủy hoặc không thể hủy do bussiness rule
+     * - `404` Đơn hàng không tồn tại
+     * @remarks Đơn hàng chỉ có thể hủy khi đơn hàng đang ở trạng thái `PENDING`
+     * @param orderId Mã đơn hàng cần hủy
+     */
+    async cancelOrder(orderId: string): Promise<WoWoResponse | OrderResponse> {
         const url = `${this.baseUrl}/v1/orders/${orderId}/cancel`
-        return await this.req.post<WoWoResponse>(url)
+        return (await this.req.post<WoWoResponse>(url)).data
     }
 
+    /**
+     * Lấy thông tin đơn hàng
+     *
+     * Mã code trả về:
+     * - `200` Lấy thông tin đơn hàng thành công
+     * - `404` Đơn hàng không tồn tại
+     * @param orderId Mã đơn hàng cần lấy thông tin
+     */
+    async getOrder(orderId: string) {
+        const url = `${this.baseUrl}/v1/orders/${orderId}`
+        return (await this.req.get<OrderResponse>(url)).data
+    }
+
+    /**
+     * Refund đơn hàng
+     * Mã code trả về:
+     * - `200` Refund đơn hàng thành công
+     * - `400` Đơn hàng không thể refund do đơn hàng đã hủy hoặc không thể refund do bussiness rule
+     * - `404` Đơn hàng không tồn tại
+     * @remarks Đơn hàng chỉ có thể refund khi đơn hàng đang ở trạng thái `SUCCESS`
+     * @param orderId Mã đơn hàng cần refund
+     */
+    async refundOrder(orderId: string) {
+        const url = `${this.baseUrl}/v1/order/${orderId}/refund`
+        return (await this.req.post<OrderResponse>(url, {})).data
+    }
 }
 
 
@@ -108,15 +143,7 @@ export type CreateOrderProps = {
     /**
      * Tổng tiền của hóa đơn
      */
-    amount: number
-    /**
-     * Đơn vị tiền tệ `VND, USD`
-     */
-    currency: string
-    /**
-     * Mô tả của đơn hàng
-     */
-    description?: string
+    money: number
     /**
      * Tên dịch vụ
      */
@@ -127,12 +154,12 @@ export type CreateOrderProps = {
      * [
      *     {
      *         name: "Product 1",
-     *         quantity: 1,
+     *         amount: 1,
      *         price: 1000
      *     },
      *     {
      *         name: "Product 2",
-     *         quantity: 2,
+     *         amount: 2,
      *         price: 2000
      *     }
      * ]
@@ -150,6 +177,7 @@ export type CreateOrderProps = {
     callback: CallbackProps
 }
 
+
 /**
  * Thông tin sản phẩm
  * @see {@link CreateOrderProps}
@@ -163,12 +191,12 @@ export type ItemProps = {
      * Số lượng sản phẩm
      * @remarks Số lượng sản phẩm phải lớn hơn 0
      */
-    quantity: number
+    amount: number
     /**
      * Giá sản phẩm
      * @remarks số tiền phải lớn hơn hoặc bằng 0
      */
-    price: number
+    unitPrice: number
 }
 
 /**
@@ -181,7 +209,7 @@ export type CallbackProps = {
     /**
      * URL callback dùng để cập nhật trạng thái đơn hàng của bạn khi người dùng thanh toán thành công
      */
-    callbackUrl: string
+    successUrl?: string
     /**
      * URL trang bạn muốn người dùng chuyển hướng đến khi người dùng thanh toán xong
      */
@@ -191,25 +219,18 @@ export type CallbackProps = {
 /**
  * Response trả về khi tạo đơn hàng
  */
-export type OrderResponse = {
-    /**
-     * Mã đơn thanh toán của ví
-     */
-    orderId: string,
-    amount: number,
-    currency: string,
-    /**
-     * Thái thái đơn hàng `SUCCESS`, `PENDING`, `REFUND`
-     */
-    status: 'SUCCESS' | 'PENDING' | 'REFUND',
-    description: string,
-    serviceName: string,
-    /**
-     * Thời gian tạo đơn hàng
-     */
-    createdAt: string,
-    /**
-     * Thời gian cập nhật đơn hàng lân cuối
-     */
-    updatedAt: string,
-}
+export type OrderResponse =
+    {
+        /**
+         * Thái thái đơn hàng `SUCCESS`, `PENDING`, `REFUND`
+         */
+        status: 'SUCCESS' | 'PENDING' | 'REFUND',
+        /**
+         * Thời gian tạo đơn hàng
+         */
+        createdAt: string,
+        /**
+         * Thời gian cập nhật đơn hàng lân cuối
+         */
+        updatedAt: string,
+    } & CreateOrderProps
