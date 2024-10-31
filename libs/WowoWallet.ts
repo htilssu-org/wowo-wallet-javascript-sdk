@@ -51,7 +51,7 @@ export class WoWoWallet {
             throw new Error('Số tiền phải lớn hơn hoặc bằng 0')
         }
 
-        if (!isValidUrl(props.callback.returnUrl)) {
+        if (!isValidUrl(props?.callback?.returnUrl)) {
             throw new Error("Đường dẫn return không hợp lệ")
         }
 
@@ -65,7 +65,10 @@ export class WoWoWallet {
         }
 
         const url = `${this.baseUrl}/v1/orders/create`
-        const response = await this.req.post<OrderResponse>(url, props)
+        const response = await this.req.post<OrderResponse>(url, {
+            ...props,
+            ...props.callback
+        })
 
         return response.data
     }
