@@ -1,4 +1,4 @@
-import {isValidUrl} from "../libs/utils/urlUtil";
+import {isValidUrl} from "../libs/utils";
 
 test("expect correct url", () => {
     const url = "https://api.wowo.htilssu.id.vn"
@@ -10,6 +10,7 @@ test("expect correct url", () => {
     expect(isValidUrl("https://api.wowo.htilssu.id.vn/orders?url=123&cc=hello")).toBe(true)
     expect(isValidUrl("https://api.wowo.htilssu.id.vn/orders?url=123&cc=he;llo")).toBe(true)
     expect(isValidUrl("https://api.wowo.htilssu.id.vn/orders/create?url=123&cc=he+llo")).toBe(true)
+    expect(isValidUrl("http://localhost:4000/api/booking/change-invoice-state?invoiceID=3")).toBe(true)
 })
 
 test("expect incorrect url with unexpect token", () => {
