@@ -1,22 +1,27 @@
-
 # Tạo Đơn Hàng (createOrder)
 
 Phương thức `createOrder` được sử dụng để tạo một đơn hàng mới trong hệ thống WoWoWallet.
 
 ## Mô Tả
 
-Phương thức này nhận thông tin đơn hàng và gửi yêu cầu đến API WoWoWallet để tạo đơn hàng mới. Nếu yêu cầu thành công, phương thức sẽ trả về thông tin chi tiết của đơn hàng đã tạo.
+Phương thức này nhận thông tin đơn hàng và gửi yêu cầu đến API WoWoWallet để tạo đơn hàng mới. Nếu yêu cầu thành công,
+phương thức sẽ trả về thông tin chi tiết của đơn hàng đã tạo.
 
 ## Cú Pháp
 
 ```typescript
-async createOrder(props: CreateOrderProps): Promise<OrderResponse>
+async
+createOrder(props
+:
+CreateOrderProps
+):
+Promise<OrderResponse>
 ```
 
 ## Tham Số
 
-| Tên   | Kiểu   | Mô Tả                                                                                  |
-|-------|--------|----------------------------------------------------------------------------------------|
+| Tên     | Kiểu               | Mô Tả                                                                                           |
+|---------|--------------------|-------------------------------------------------------------------------------------------------|
 | `props` | `CreateOrderProps` | Thông tin về đơn hàng cần tạo. Xem phần [CreateOrderProps](#createorderprops) để biết chi tiết. |
 
 ## Thông Tin Tham Số
@@ -64,14 +69,16 @@ Phương thức `createOrder` có thể phát sinh các lỗi sau:
 Dưới đây là một ví dụ về cách sử dụng phương thức `createOrder`:
 
 ```typescript
+import {OrderResponse} from "./WowoWallet";
+
 const wowoWallet = new WoWoWallet("your_api_key");
 
 const orderProps: CreateOrderProps = {
     money: 3000,
     serviceName: "Dịch vụ giao hàng",
     items: [
-        { name: "Sản phẩm 1", amount: 1, unitPrice: 1000 },
-        { name: "Sản phẩm 2", amount: 2, unitPrice: 1000 }
+        {name: "Sản phẩm 1", amount: 1, unitPrice: 1000},
+        {name: "Sản phẩm 2", amount: 2, unitPrice: 1000}
     ],
     callback: {
         successUrl: "https://your-callback-url/success",
@@ -80,13 +87,38 @@ const orderProps: CreateOrderProps = {
 };
 
 try {
-    const orderResponse = await wowoWallet.createOrder(orderProps);
+    const orderResponse: OrderResponse = await wowoWallet.createOrder(orderProps);
     console.log("Đơn hàng đã được tạo:", orderResponse);
 } catch (error) {
     console.error("Lỗi khi tạo đơn hàng:", error.message);
 }
 ```
 
+## Ví Dụ Phản Hồi
+
+```json
+{
+  "id": 4,
+  "money": 100000,
+  "status": "PENDING",
+  "returnUrl": "https://localhost:8080/order/test",
+  "successUrl": "https://localhost:8080/order/success",
+  "created": "2024-10-31T14:13:16.134014Z",
+  "updated": "2024-10-31T14:13:16.134014Z",
+  "serviceName": "Mua vé máy bay",
+  "items": [
+    {
+      "name": "Vé máy bay HN - SGN",
+      "amount": 1,
+      "unitPrice": 2000000
+    }
+  ],
+  "checkoutUrl": "https://wowo.htilssu.id.vn/orders/4"
+}
+```
+
 ## Kết Luận
 
-Phương thức `createOrder` cho phép bạn dễ dàng tạo đơn hàng trong hệ thống WoWoWallet, với đầy đủ các tham số cần thiết và khả năng xử lý các lỗi phổ biến. Hãy chắc chắn kiểm tra các thông tin đầu vào để đảm bảo rằng chúng hợp lệ trước khi gọi phương thức này.
+Phương thức `createOrder` cho phép bạn dễ dàng tạo đơn hàng trong hệ thống WoWoWallet, với đầy đủ các tham số cần thiết
+và khả năng xử lý các lỗi phổ biến. Hãy chắc chắn kiểm tra các thông tin đầu vào để đảm bảo rằng chúng hợp lệ trước khi
+gọi phương thức này.

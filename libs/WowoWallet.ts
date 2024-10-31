@@ -233,4 +233,8 @@ export type OrderResponse =
          * Thời gian cập nhật đơn hàng lân cuối
          */
         updatedAt: string,
+        /**
+         * Đường dẫn thanh toán
+         */
+        checkoutUrl: string,
     } & CreateOrderProps
