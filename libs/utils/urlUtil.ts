@@ -1,4 +1,4 @@
-const regexUrl = /^(https?):\/\/(?!.*\.\.)[\w.\/-]+(:\d+\/)?[\w.\/-]*(\?(\w+=\S+&?)+)?$/
+const regexUrl = /^(https?):\/\/(?!.*\.\.)[\w.]+(:\d+\/?)?[\w.\/-]*(\?(\w+=\S+&?)+)?$/
 
 /**
  * Kiểm tra xem url có hợp lệ hay không

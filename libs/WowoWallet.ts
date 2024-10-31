@@ -51,7 +51,7 @@ export class WoWoWallet {
             throw new Error('Số tiền phải lớn hơn hoặc bằng 0')
         }
 
-        if (props.callback?.returnUrl && !isValidUrl(props.callback.returnUrl)) {
+        if (!isValidUrl(props.callback.returnUrl)) {
             throw new Error("Đường dẫn return không hợp lệ")
         }
 
