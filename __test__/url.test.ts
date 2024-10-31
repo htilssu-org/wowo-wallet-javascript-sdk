@@ -11,6 +11,8 @@ test("expect correct url", () => {
     expect(isValidUrl("https://api.wowo.htilssu.id.vn/orders?url=123&cc=he;llo")).toBe(true)
     expect(isValidUrl("https://api.wowo.htilssu.id.vn/orders/create?url=123&cc=he+llo")).toBe(true)
     expect(isValidUrl("http://localhost:4000/api/booking/change-invoice-state?invoiceID=3")).toBe(true)
+    expect(isValidUrl(`http://localhost:4000/api/booking/change-invoice-state?invoiceID=\{\}`)).toBe(true)
+    expect(isValidUrl(`http://localhost:4000/api`)).toBe(true)
 })
 
 test("expect incorrect url with unexpect token", () => {
