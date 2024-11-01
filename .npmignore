@@ -1,7 +1,5 @@
-/index.ts
 /tsconfig.json
 /.idea
-/libs
 /__test__
 /node_modules/
 /.github
