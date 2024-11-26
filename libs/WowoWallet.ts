@@ -1,11 +1,17 @@
 import axios, {AxiosInstance} from "axios";
 import {isValidUrl} from "./utils";
 
+interface WalletDTO {
+    id: string,
+    balance: number,
+    currency: string,
+}
+
 export class WoWoWallet {
 
+    req: AxiosInstance
     private readonly apiKey: string
     private readonly baseUrl: string = "https://api.wowo.htilssu.id.vn"
-    req: AxiosInstance
 
     /**
      * Tạo mới một instance của WoWoWallet
@@ -71,6 +77,31 @@ export class WoWoWallet {
         })
 
         return response.data
+    }
+
+    async createWallet(): Promise<WalletDTO> {
+        const url = `${this.baseUrl}/v1/application/wallet`
+        return (await this.req.post<WalletDTO>(url)).data
+    }
+
+    async deleteWallet(walletId: string): Promise<boolean> {
+        const url = `${this.baseUrl}/v1/application/wallet/${walletId}`
+        return (await this.req.delete(url)).status === 200
+    }
+
+    async getWallet(walletId: string): Promise<WalletDTO> {
+        const url = `${this.baseUrl}/v1/application/wallet/${walletId}`
+        return (await this.req.get<WalletDTO>(url)).data
+    }
+
+    async transferMoney(walletId: string, amount: number): Promise<WalletDTO> {
+        const url = `${this.baseUrl}/v1/application/transfer`
+        return (await this.req.post<WalletDTO>(url, {walletId, amount})).data
+    }
+
+    async getMoneyFromWallet(walletId: string, amount: number): Promise<WalletDTO> {
+        const url = `${this.baseUrl}/v1/application/withdraw`
+        return (await this.req.post<WalletDTO>(url, {walletId, amount})).data
     }
 
     /**

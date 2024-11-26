@@ -14,6 +14,8 @@ test("expect correct url", () => {
     expect(isValidUrl(`http://localhost:4000/api/booking/change-invoice-state?invoiceID=\{\}`)).toBe(true)
     expect(isValidUrl(`http://localhost:4000/api`)).toBe(true)
     expect(isValidUrl(`http://localhost:4000`)).toBe(true)
+    expect(isValidUrl(`https://localhost:8080/v1/booking-field/123123/status-acting`)).toBe(true)
+    expect(isValidUrl(`http://localhost:5173/payment-success?bookingData=12312.sd`)).toBe(true)
 })
 
 test("expect incorrect url with unexpect token", () => {
@@ -25,7 +27,6 @@ test("expect incorrect url with unexpect token", () => {
     expect(isValidUrl("https://api.wowo.htilssu.id.vn\"")).toBe(false)
     expect(isValidUrl("https://api.wowo.htilssu.id.vn>")).toBe(false)
     expect(isValidUrl("https://api.wowo.htilssu.id.vn<")).toBe(false)
-
 })
 
 test("expect incorrect url with more [.]", () => {
