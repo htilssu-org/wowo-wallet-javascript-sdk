@@ -142,7 +142,7 @@ export class WoWoWallet {
      * @param orderId Mã đơn hàng cần refund
      */
     async refundOrder(orderId: string) {
-        const url = `${this.baseUrl}/v1/order/${orderId}/refund`
+        const url = `${this.baseUrl}/v1/orders/${orderId}/refund`
         return (await this.req.post<OrderResponse>(url, {})).data
     }
 }
