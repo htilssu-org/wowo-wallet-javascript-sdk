@@ -140,10 +140,13 @@ export class WoWoWallet {
      * - `404` Đơn hàng không tồn tại
      * @remarks Đơn hàng chỉ có thể refund khi đơn hàng đang ở trạng thái `SUCCESS`
      * @param orderId Mã đơn hàng cần refund
+     * @param amount
      */
-    async refundOrder(orderId: string) {
+    async refundOrder(orderId: string, amount: number): Promise<OrderResponse> {
         const url = `${this.baseUrl}/v1/orders/${orderId}/refund`
-        return (await this.req.post<OrderResponse>(url, {})).data
+        return (await this.req.post<OrderResponse>(url, {
+            amount
+        })).data
     }
 }
 
@@ -178,6 +181,10 @@ export type CreateOrderProps = {
      * Tổng tiền của hóa đơn
      */
     money: number
+    /**
+     * Số tiền giảm giá
+     */
+    discountMoney: number
     /**
      * Tên dịch vụ
      */
