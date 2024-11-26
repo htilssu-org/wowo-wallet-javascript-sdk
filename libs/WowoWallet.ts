@@ -182,10 +182,6 @@ export type CreateOrderProps = {
      */
     money: number
     /**
-     * Số tiền giảm giá
-     */
-    discountMoney: number
-    /**
      * Tên dịch vụ
      */
     serviceName: string
@@ -270,6 +266,10 @@ export type OrderResponse =
          * Thời gian tạo đơn hàng
          */
         createdAt: string,
+        /**
+         * Số tiền giảm giá
+         */
+        discountMoney: number
         /**
          * Thời gian cập nhật đơn hàng lân cuối
          */
