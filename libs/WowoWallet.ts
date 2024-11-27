@@ -94,14 +94,14 @@ export class WoWoWallet {
         return (await this.req.get<WalletDTO>(url)).data
     }
 
-    async transferMoney(walletId: string, amount: number): Promise<WalletDTO> {
+    async transferMoney(walletId: string, amount: number): Promise<boolean> {
         const url = `${this.baseUrl}/v1/application/transfer`
-        return (await this.req.post<WalletDTO>(url, {walletId, amount})).data
+        return (await this.req.post<WalletDTO>(url, {walletId, amount})).status === 200
     }
 
-    async getMoneyFromWallet(walletId: string, amount: number): Promise<WalletDTO> {
+    async getMoneyFromWallet(walletId: string, amount: number): Promise<boolean> {
         const url = `${this.baseUrl}/v1/application/withdraw`
-        return (await this.req.post<WalletDTO>(url, {walletId, amount})).data
+        return (await this.req.post<WalletDTO>(url, {walletId, amount})).status === 200
     }
 
     /**
